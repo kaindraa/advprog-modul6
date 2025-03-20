@@ -66,3 +66,8 @@ Kode menggunakan library `std::fs` untuk membaca file. Setelah itu, kode menggun
 Sebelumnya, server selalu mengembalikan hello.html tanpa memeriksa request yang diterima. Sekarang, server memvalidasi request dengan hanya mengembalikan hello.html jika klien meminta `/`, sedangkan untuk permintaan lain server akan mengembalikan response 404 Not Found dengan halaman `404.html`. Kode membaca baris pertama dari request HTTP, lalu membandingkannya dengan `GET / HTTP/1.1`, kemudian menentukan status response dan file yang dikirim berdasarkan path yang diminta.
 
 Refactoring dilakukan untuk menghilangkan duplikasi kode dengan menggunakan tuple untuk menentukan `status_line` dan `filename` dalam satu langkah. Setelah itu, pembacaan file dan pengiriman response dilakukan dalam satu blok kode agar lebih rapi.
+
+## Milestone 4: Simulation slow response
+Sebelumnya, server hanya menangani setiap request secara berurutan dalam satu thread. Sekarang, kita menambahkan simulasi request yang lambat dengan menunda response selama 10 detik jika klien mengakses `/sleep`. Ini dilakukan dengan `thread::sleep(Duration::from_secs(10))`, yang memblokir eksekusi selama durasi tersebut sebelum mengirim response.
+
+Saat browser pertama mengakses `127.0.0.1:7878/sleep`, server mulai memproses request tersebut dan terblokir selama 10 detik karena `thread::sleep()`. Jika selama waktu itu browser kedua mencoba mengakses `127.0.0.1:7878/`, request tersebut tidak akan langsung diproses dan harus menunggu hingga request `/sleep` selesai. Hal ini terjadi karena server berjalan dalam satu thread, sehingga hanya dapat menangani satu request pada satu waktu.
