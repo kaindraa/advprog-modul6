@@ -50,7 +50,7 @@ Penjelasan lines:
 
 ## Milestone 2: Returning HTML
 
-![Screenshot](readme_images/milestones_2.png)
+![Screenshot Milestone 2](readme_images/milestones_2.png)
 
 Perubahan utama kode adalah sekarang server dapat mengirimkan response HTTP kepada client. Sebelumnya kode hanya membaca dan mencetak request HTTP di terminal. Sekarang, server dapat mengembalikan response yang berisi status HTTP, header, dan isi file hello.html.
 
@@ -58,3 +58,11 @@ Kode menggunakan library `std::fs` untuk membaca file. Setelah itu, kode menggun
 
  Kode kemudian menulis respon HTTP dalam variabel `response`. Setelah itu, `    stream.write_all(response.as_bytes()).unwrap();` akan mengirimkan response kepada client melalui koneksi TCP.
 
+## Milestone 3: Validating request and selectively responding
+
+![Screenshot Milestone 3](readme_images/milestones_3.png)
+
+
+Sebelumnya, server selalu mengembalikan hello.html tanpa memeriksa request yang diterima. Sekarang, server memvalidasi request dengan hanya mengembalikan hello.html jika klien meminta `/`, sedangkan untuk permintaan lain server akan mengembalikan response 404 Not Found dengan halaman `404.html`. Kode membaca baris pertama dari request HTTP, lalu membandingkannya dengan `GET / HTTP/1.1`, kemudian menentukan status response dan file yang dikirim berdasarkan path yang diminta.
+
+Refactoring dilakukan untuk menghilangkan duplikasi kode dengan menggunakan tuple untuk menentukan `status_line` dan `filename` dalam satu langkah. Setelah itu, pembacaan file dan pengiriman response dilakukan dalam satu blok kode agar lebih rapi.
