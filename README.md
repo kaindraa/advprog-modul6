@@ -71,3 +71,9 @@ Refactoring dilakukan untuk menghilangkan duplikasi kode dengan menggunakan tupl
 Sebelumnya, server hanya menangani setiap request secara berurutan dalam satu thread. Sekarang, kita menambahkan simulasi request yang lambat dengan menunda response selama 10 detik jika klien mengakses `/sleep`. Ini dilakukan dengan `thread::sleep(Duration::from_secs(10))`, yang memblokir eksekusi selama durasi tersebut sebelum mengirim response.
 
 Saat browser pertama mengakses `127.0.0.1:7878/sleep`, server mulai memproses request tersebut dan terblokir selama 10 detik karena `thread::sleep()`. Jika selama waktu itu browser kedua mencoba mengakses `127.0.0.1:7878/`, request tersebut tidak akan langsung diproses dan harus menunggu hingga request `/sleep` selesai. Hal ini terjadi karena server berjalan dalam satu thread, sehingga hanya dapat menangani satu request pada satu waktu.
+
+## Milestone 5: Multithreaded Server
+
+Sebelumnya, server hanya menggunakan single thread, yang menyebabkan satu request lambat dapat memblokir request lain. Sekarang, kode meningkatkan throughput dengan menggunakan `ThreadPool`. Melalui `ThreadPool`, server dapat menangani banyak request secara bersamaan.
+
+ThreadPool bekerja dengan membuat sekumpulan thread tetap saat server dimulai. Ketika ada request masuk, server akan menempatkan request tersebut dalam queue, dan worker thread yang tersedia akan mengambil dan mengeksekusi request tersebut. Dengan cara ini, server bisa menangani beberapa request secara paralel, tanpa membuat thread baru setiap kali ada request, sehingga lebih efisien.
