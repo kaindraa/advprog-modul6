@@ -77,3 +77,8 @@ Saat browser pertama mengakses `127.0.0.1:7878/sleep`, server mulai memproses re
 Sebelumnya, server hanya menggunakan single thread, yang menyebabkan satu request lambat dapat memblokir request lain. Sekarang, kode meningkatkan throughput dengan menggunakan `ThreadPool`. Melalui `ThreadPool`, server dapat menangani banyak request secara bersamaan.
 
 ThreadPool bekerja dengan membuat sekumpulan thread tetap saat server dimulai. Ketika ada request masuk, server akan menempatkan request tersebut dalam queue, dan worker thread yang tersedia akan mengambil dan mengeksekusi request tersebut. Dengan cara ini, server bisa menangani beberapa request secara paralel, tanpa membuat thread baru setiap kali ada request, sehingga lebih efisien.
+
+## [Bonus] 
+`new` vs `build`
+
+Sebelumnya, ThreadPool::new(size) akan panic jika `size` tidak valid (`size <= 0`) dan menyebabkan program berhenti secara mendadak. Dengan menggunakan `ThreadPool::build(size)`, kode ini mengganti panic dengan Result. Hal ini memungkinkan program untuk menangani kesalahan dengan lebih aman daripada panic. 
